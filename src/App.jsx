@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { createClient } from '@supabase/supabase-js';
+// import { createClient } from '@supabase/supabase-js'; // KROK 1: Tymczasowo wyłączone
 
 // --- KROK 1: Konfiguracja klienta Supabase ---
-// Klucze są teraz wczytywane ze zmiennych środowiskowych.
-// To bezpieczniejsza metoda, idealna do deploymentu na Vercel.
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
-const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
+// const supabaseUrl = process.env.REACT_APP_SUPABASE_URL; // KROK 1: Tymczasowo wyłączone
+// const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY; // KROK 1: Tymczasowo wyłączone
 
-// Utworzenie i eksport klienta Supabase.
-// Dzięki temu będziemy mogli go używać w całej aplikacji.
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// export const supabase = createClient(supabaseUrl, supabaseAnonKey); // KROK 1: Tymczasowo wyłączone
+export const supabase = {}; // KROK 1: Pusty obiekt, żeby aplikacja się nie wysypała
 
 // --- Komponenty UI ---
 
@@ -45,38 +42,20 @@ const Auth = () => {
   // Funkcja obsługująca logowanie
   const handleLogin = async (e) => {
     e.preventDefault();
-    clearNotification();
-    setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (error) {
-      setNotification({ message: `Błąd logowania: ${error.message}`, type: 'error' });
-    } else {
-      // Powiadomienie o sukcesie nie jest konieczne, bo aplikacja przełączy widok
-    }
-    setLoading(false);
+    alert('Logowanie jest tymczasowo wyłączone na potrzeby testu.');
   };
 
   // Funkcja obsługująca rejestrację
   const handleSignup = async (e) => {
     e.preventDefault();
-    clearNotification();
-    setLoading(true);
-    const { error } = await supabase.auth.signUp({ email, password });
-
-    if (error) {
-      setNotification({ message: `Błąd rejestracji: ${error.message}`, type: 'error' });
-    } else {
-      setNotification({ message: 'Rejestracja pomyślna! Sprawdź email, aby potwierdzić konto.', type: 'success' });
-    }
-    setLoading(false);
+    alert('Rejestracja jest tymczasowo wyłączona na potrzeby testu.');
   };
 
   return (
     <div className="w-full max-w-md">
       <div className="bg-white p-8 rounded-xl shadow-lg">
         <h1 className="text-2xl font-bold text-center text-gray-800 mb-2">Witaj w aplikacji!</h1>
-        <p className="text-center text-gray-500 mb-6">Zaloguj się lub utwórz konto</p>
+        <p className="text-center text-gray-500 mb-6">Zaloguj się lub utwórz konto (WERSJA TESTOWA)</p>
         
         <Notification message={notification.message} type={notification.type} onClose={clearNotification} />
 
@@ -135,7 +114,7 @@ const Account = ({ session, onSignOut }) => {
     <div className="w-full max-w-md">
        <div className="bg-white p-8 rounded-xl shadow-lg text-center">
          <h1 className="text-2xl font-bold text-gray-800 mb-4">Jesteś zalogowany!</h1>
-         <p className="text-gray-600 mb-6">Twój email: <strong className="text-blue-600">{session.user.email}</strong></p>
+         <p className="text-gray-600 mb-6">Email: (test)</p>
          <button
             onClick={onSignOut}
             className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
@@ -153,29 +132,16 @@ const PasswordReset = ({ onBack }) => {
     const [loading, setLoading] = useState(false);
     const [notification, setNotification] = useState({ message: '', type: '' });
 
-    const clearNotification = () => setNotification({ message: '', type: '' });
-
     const handlePasswordReset = async (e) => {
         e.preventDefault();
-        clearNotification();
-        setLoading(true);
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: window.location.origin, // Link w mailu przekieruje z powrotem do aplikacji
-        });
-
-        if (error) {
-            setNotification({ message: `Błąd: ${error.message}`, type: 'error' });
-        } else {
-            setNotification({ message: 'Jeśli konto istnieje, wysłaliśmy link do resetu hasła na podany email.', type: 'success' });
-        }
-        setLoading(false);
+        alert('Reset hasła jest tymczasowo wyłączony na potrzeby testu.');
     };
 
     return (
         <div className="w-full max-w-md">
             <div className="bg-white p-8 rounded-xl shadow-lg">
                 <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">Resetowanie hasła</h1>
-                <Notification message={notification.message} type={notification.type} onClose={clearNotification} />
+                <Notification message={notification.message} type={notification.type} onClose={() => {}} />
                 <form onSubmit={handlePasswordReset}>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="reset-email">
@@ -215,61 +181,35 @@ const PasswordReset = ({ onBack }) => {
 
 // --- Główny komponent aplikacji (App) ---
 export default function App() {
-  const [session, setSession] = useState(null);
-  const [view, setView] = useState('auth'); // 'auth', 'account', 'password_reset'
+  // KROK 2: Cała logika sesji jest tymczasowo wyłączona.
+  // const [session, setSession] = useState(null);
+  // const [view, setView] = useState('auth'); 
 
-  // useEffect do sprawdzania sesji użytkownika przy starcie aplikacji
-  useEffect(() => {
-    // Sprawdź, czy jest już aktywna sesja
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setView(session ? 'account' : 'auth');
-    });
+  // useEffect(() => {
+  //   supabase.auth.getSession().then(({ data: { session } }) => {
+  //     setSession(session);
+  //     setView(session ? 'account' : 'auth');
+  //   });
 
-    // Ustaw nasłuchiwanie na zmiany stanu autentykacji (logowanie, wylogowanie)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setView(session ? 'account' : 'auth');
-    });
+  //   const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+  //     setSession(session);
+  //     setView(session ? 'account' : 'auth');
+  //   });
 
-    // Zakończ subskrypcję, gdy komponent zostanie odmontowany
-    return () => subscription.unsubscribe();
-  }, []);
+  //   return () => subscription.unsubscribe();
+  // }, []);
 
-  const handleSignOut = async () => {
-      await supabase.auth.signOut();
-      // onAuthStateChange zajmie się resztą (zmianą sesji i widoku)
-  }
-
-  // Funkcja renderująca odpowiedni widok
-  const renderView = () => {
-      if (session && view === 'account') {
-          return <Account key="account" session={session} onSignOut={handleSignOut} />;
-      }
-      if (view === 'password_reset') {
-          return <PasswordReset key="password-reset" onBack={() => setView('auth')} />;
-      }
-      return <Auth key="auth" />;
-  };
-
+  // const handleSignOut = async () => {
+  //     await supabase.auth.signOut();
+  // }
+  
+  // KROK 3: Zawsze renderujemy widok logowania
   return (
     // Kontener centrujący zawartość i nadający tło
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-      {renderView()}
-      
-      {/* Przycisk do przełączania na widok resetowania hasła */}
-      {!session && view === 'auth' && (
-        <button 
-          onClick={() => setView('password_reset')} 
-          className="mt-6 text-sm text-blue-500 hover:underline"
-        >
-          Nie pamiętasz hasła?
-        </button>
-      )}
-
-      {/* Stopka */}
+      <Auth />
       <footer className="text-center mt-8 text-gray-400 text-xs">
-          <p>Aplikacja startowa React + Supabase</p>
+          <p>Aplikacja startowa React + Supabase (WERSJA TESTOWA)</p>
       </footer>
     </div>
   );
