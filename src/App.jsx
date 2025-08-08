@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
 // --- KROK 1: Konfiguracja klienta Supabase ---
-// Dane zostały zaktualizowane o Twoje klucze.
-const supabaseUrl = 'https://hkunjiepxymehhotxqkt.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrdW5qaWVweHltZWhob3R4cWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2NzMyMDksImV4cCI6MjA3MDI0OTIwOX0.1xYJ78rGWUyvkY-f3DDKnDjfJI2JHL176kLe9RKY47M';
+// Klucze są teraz wczytywane ze zmiennych środowiskowych.
+// To bezpieczniejsza metoda, idealna do deploymentu na Vercel.
+const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
+const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
 
 // Utworzenie i eksport klienta Supabase.
 // Dzięki temu będziemy mogli go używać w całej aplikacji.
